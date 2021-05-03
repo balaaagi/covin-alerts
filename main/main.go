@@ -37,8 +37,6 @@ type CovidCentresResponse struct {
 }
 
 func main() {
-	print(len(os.Args))
-	print(os.Args)
 	if len(os.Args) > 2 {
 		covinArgs := os.Args[0:]
 		searchBy, _ := strconv.Atoi(covinArgs[1])
