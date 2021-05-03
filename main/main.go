@@ -43,19 +43,38 @@ func main() {
 		date:= covinArgs[2]
 		minAge, _ := strconv.Atoi(covinArgs[3])
 		thirdParam:= covinArgs[4]
+		forever, _ := strconv.ParseBool(covinArgs[5])
+		var _defaultInterval = "2s"
+		if forever && len(covinArgs)>6 {
+			_defaultInterval =covinArgs[6]
+		}
 		cronScheduler := cron.New()
 
 		if searchBy == 1 {
-			cronScheduler.AddFunc("@every 15m", func() { findSlotsByPinCode(date,thirdParam,minAge) })
+			if forever{
+				cronScheduler.AddFunc("@every "+_defaultInterval, func() { findSlotsByPinCode(date,thirdParam,minAge) })
+			}else {
+				findSlotsByPinCode(date,thirdParam,minAge)
+			}
 
 		}else{
-			cronScheduler.AddFunc("@every 15s", func() { findSlotsByDistrictId(date,thirdParam,minAge) })
+			if forever{
+				cronScheduler.AddFunc("@every "+_defaultInterval, func() { findSlotsByDistrictId(date,thirdParam,minAge) })
+
+			}else{
+				findSlotsByPinCode(date,thirdParam,minAge)
+			}
 
 		}
-		cronScheduler.Start()
+		if forever{
+			cronScheduler.Start()
+
+		}else {
+			cronScheduler.Stop()
+		}
 
 	}else{
-			print("Please give Arguments of this format - covin ")
+		print("Please give Arguments of this format - covin ")
 	}
 
 
@@ -94,7 +113,7 @@ func getDetailsFromCoWin(url string,minAge int)  {
 		}
 
 	}
-	
+
 }
 
 func processResponseAndAlertIfPresent(response CovidCentresResponse, age int) {
@@ -103,21 +122,24 @@ func processResponseAndAlertIfPresent(response CovidCentresResponse, age int) {
 		for i := 0; i < totalNoOfCenters; i++{
 			var center = response.Centers[i]
 			var noOfSessionsInCenter=len(center.Sessions)
+			fmt.Printf("Center Name %s \n", center.Name)
 			if noOfSessionsInCenter>0 {
 				for j:=0;j<noOfSessionsInCenter;j++{
 
 					var minimumAgeLimit=center.Sessions[j].MinAgeLimit
 					var availablity=center.Sessions[j].AvailableCapacity
-					if minimumAgeLimit== minimumAgeLimit && availablity>5 {
+					if minimumAgeLimit== age && availablity>5 {
 						alertMessage:= fmt.Sprintf("Center: %s , Date: %s , Slot Info: %s Count: %d", center.Name, center.Sessions[j].Date, center.Sessions[j].Slots,center.Sessions[j].AvailableCapacity)
-						fmt.Printf("Center Name %s \n", center.Name)
 						fmt.Printf("Date %s \n", center.Sessions[j].Date)
-						fmt.Printf("Slot Information %s",center.Sessions[j].Slots)
-						fmt.Printf("Count Available: %d Minimum Age: %d",center.Sessions[j].AvailableCapacity,minimumAgeLimit)
+						fmt.Printf("Slot Information %s \n",center.Sessions[j].Slots)
+						fmt.Printf("Count Available: %d Minimum Age: %d\n",availablity,minimumAgeLimit)
 						notify.Alert("Slot Alert", "Slot Available", alertMessage, "https://png.pngtree.com/element_pic/17/04/07/628c04fea84856c8d04b3878eb989009.jpg")
+					}else{
+						fmt.Printf("No Slots Available for given date | pincode | district !  \n")
 					}
 				}
 			}
+			fmt.Printf("--------------------\n")
 		}
 	}else{
 		fmt.Println("No Centers Found")

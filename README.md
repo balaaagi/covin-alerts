@@ -31,3 +31,19 @@ make osx_build
 
 * For State ID - https://cdn-api.co-vin.in/api/v2/admin/location/states
 * For Distric ID - https://cdn-api.co-vin.in/api/v2/admin/location/districts/`stateid`  
+
+## Output
+You would get console output as below
+```
+Center Name Manipal Clinic
+No Slots Available for given date | pincode | district !
+No Slots Available for given date | pincode | district !
+--------------------
+Center Name Jarganahalli Corporator Office
+Date 03-05-2021
+Slot Information [09:00AM-11:00AM 11:00AM-01:00PM 01:00PM-03:00PM 03:00PM-06:00PM]
+Count Available: 6 Minimum Age: 45
+--------------------
+```
+
+Also you will get OS level alerts
