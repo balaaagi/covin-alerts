@@ -20,9 +20,9 @@ make osx_build
 
 ## Instruction to Execute
 
-``./bin/main-osx 1 03-05-2021 45 560078``
+* If you want to search by pincode ``./bin/main-osx 1 03-05-2021 45 560078``
 
-``./bin/main-osx 2 03-05-2021 45 265``
+* If you want to search by district id ``./bin/main-osx 2 03-05-2021 45 265``
 
 * first Argument - 1- search by pincode 2 seach by district id
 * second argument - - date dd-mm-yyyy
