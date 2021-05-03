@@ -30,4 +30,4 @@ make osx_build
 * Last argument - pincode/district id 
 
 * For State ID - https://cdn-api.co-vin.in/api/v2/admin/location/states
-* For Distric ID - https://cdn-api.co-vin.in/api/v2/admin/location/districts/<stateid>  
+* For Distric ID - https://cdn-api.co-vin.in/api/v2/admin/location/districts/`stateid`  
